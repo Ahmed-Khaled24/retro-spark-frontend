@@ -1,6 +1,6 @@
 import SignupForm from "../features/auth/SignupForm";
 
-const Signup = () => {
+const SignupPage = () => {
     return (
         <div className="flex items-center justify-center">
             <SignupForm />
@@ -8,4 +8,4 @@ const Signup = () => {
     );
 };
 
-export default Signup;
+export default SignupPage;
