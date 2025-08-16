@@ -1,9 +1,29 @@
 import { createBrowserRouter } from "react-router";
 import AuthLayout from "../layouts/AuthLayout";
 import LoginPage from "../pages/Login";
-import Signup from "../pages/Signup";
+import SignupPage from "../pages/Signup";
+import LoggedInLayout from "../layouts/LoggedInLayout";
+import BoardsGridPage from "../pages/BoardsGrid";
 
 export const router = createBrowserRouter([
+    {
+        path: "/app",
+        Component: LoggedInLayout,
+        children: [
+            {
+                index: true,
+                Component: BoardsGridPage,
+            },
+            {
+                path: "/app/teams",
+                Component: () => <div>Teams Page</div>, // Placeholder for Teams page
+            },
+            {
+                path: "/app/settings",
+                Component: () => <div>Settings Page</div>, // Placeholder for Settings page
+            },
+        ],
+    },
     {
         path: "/auth",
         Component: AuthLayout,
@@ -14,7 +34,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: "signup",
-                Component: Signup,
+                Component: SignupPage,
             },
         ],
     },
