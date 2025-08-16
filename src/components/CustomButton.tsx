@@ -6,9 +6,11 @@ import { Oval } from "react-loader-spinner";
 
 interface CustomButtonProps {
     children: ReactNode;
+    buttonType?: "button" | "submit";
     link?: string;
     className?: string;
     loading?: boolean;
+    rounded?: boolean;
     onClick?: () => void;
 }
 const CustomButton: FC<CustomButtonProps> = ({
@@ -16,13 +18,18 @@ const CustomButton: FC<CustomButtonProps> = ({
     link,
     className,
     loading,
+    rounded = false,
+    buttonType = "button",
     ...other
 }) => {
     const classes = clsx(
-        "text-white font-semibold text-center uppercase",
-        "bg-green-primary rounded-md cursor-pointer flex gap-2 items-center justify-center px-10 py-2",
-        "hover:bg-green-primary-bright transition-colors duration-300 ease-in-out",
+        "text-white font-semibold text-center",
+        "bg-primary cursor-pointer flex gap-2 items-center justify-center px-10 py-2",
+        "hover:bg-primary/75 transition-colors duration-300 ease-in-out",
         className,
+        {
+            "rounded-full": rounded,
+        },
     );
 
     if (loading) {
@@ -38,7 +45,12 @@ const CustomButton: FC<CustomButtonProps> = ({
             {children}
         </Link>
     ) : (
-        <Button className={classes} {...other} disabled={loading}>
+        <Button
+            {...other}
+            className={classes}
+            disabled={loading}
+            type={buttonType}
+        >
             {children}
         </Button>
     );
