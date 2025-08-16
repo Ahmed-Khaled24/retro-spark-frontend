@@ -1,3 +1,11 @@
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { GoHomeFill, GoPeople } from "react-icons/go";
+import { FaGear } from "react-icons/fa6";
+import clsx from "clsx";
+import DefaultUserAvatar from "../components/DefaultUserAvatar";
+import Dropdown from "../components/Dropdown";
+
 export const PublicNavbar = () => {
     return (
         <nav className="flex py-4">
@@ -6,6 +14,77 @@ export const PublicNavbar = () => {
     );
 };
 
-export const AuthenticatedNavbar = () => {
-    return <div>Authenticated Navbar</div>;
+export const LoggedInNavbar = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const [links, setLinks] = useState([
+        {
+            icon: <GoHomeFill size={32} />,
+            path: "/app",
+            tooltip: "Boards",
+            active: false,
+        },
+        {
+            icon: <GoPeople size={32} />,
+            path: "/app/teams",
+            tooltip: "Teams",
+            active: false,
+        },
+        {
+            icon: <FaGear size={32} />,
+            path: "/app/settings",
+            tooltip: "Settings",
+            active: false,
+        },
+    ]);
+
+    useEffect(() => {
+        console.log();
+        setLinks((prevLinks) =>
+            prevLinks.map((link) => ({
+                ...link,
+                active: link.path === location.pathname,
+            })),
+        );
+    }, [location]);
+
+    return (
+        <aside className="flex flex-col p-4 h-full">
+            <img
+                src="/logo.svg"
+                alt="logo"
+                className="pb-8 border-b-1 border-primary-border"
+            />
+            <nav className="flex flex-col gap-12 items-center pt-12">
+                {links.map((link) => (
+                    <Link
+                        to={link.path}
+                        key={link.path}
+                        className={clsx("text-gray-500", {
+                            "text-primary": link.active,
+                        })}
+                    >
+                        {link.icon}
+                    </Link>
+                ))}
+            </nav>
+            {/* User Avatar */}
+            <div className="mt-auto mx-auto">
+                <Dropdown
+                    menuClassName="translate-y-[-5px] bg-white"
+                    mainButtonContent={
+                        <DefaultUserAvatar username="Ahmed Khaled" />
+                    }
+                    items={[
+                        {
+                            content: "Logout",
+                            onClick: () => navigate("/auth/login"),
+                        },
+                    ]}
+                    anchor="top start"
+                />
+            </div>
+        </aside>
+    );
 };
