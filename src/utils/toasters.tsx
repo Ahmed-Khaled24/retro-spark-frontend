@@ -9,8 +9,13 @@ export const successToast = (
 ) =>
     toast.success(message, {
         iconTheme: {
-            primary: "rgba(40, 167, 69, 1)",
-            secondary: "#fff",
+            primary: "white",
+            secondary: "rgb(40, 167, 69)",
+        },
+        style: {
+            backgroundColor: "rgb(40, 167, 69)",
+            color: "white",
+            fontWeight: "bold",
         },
         position: position as ToastPosition,
         duration,
@@ -23,8 +28,13 @@ export const errorToast = (
 ) =>
     toast.error(message, {
         iconTheme: {
-            primary: "rgba(255, 0, 0, 1)",
-            secondary: "#fff",
+            primary: "white",
+            secondary: "rgb(255, 0, 0)",
+        },
+        style: {
+            backgroundColor: "rgba(255, 0, 0)",
+            color: "white",
+            fontWeight: "bold",
         },
         position,
         duration,
