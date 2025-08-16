@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import { z } from "zod";
@@ -12,6 +12,7 @@ const LoginFormSchema = z.object({
 type LoginFormFields = z.infer<typeof LoginFormSchema>;
 
 export const LoginForm = () => {
+    const navigate = useNavigate();
     const [validating, setValidating] = useState(false);
     const [fields, setFields] = useState<LoginFormFields>({
         email: "",
@@ -34,6 +35,9 @@ export const LoginForm = () => {
         } finally {
             setValidating(false);
         }
+
+        // Handle login logic here
+        navigate("/app");
     };
 
     return (

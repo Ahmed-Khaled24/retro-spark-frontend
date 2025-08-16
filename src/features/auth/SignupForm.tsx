@@ -2,7 +2,7 @@ import z from "zod";
 import CustomInput from "../../components/CustomInput";
 import { useState } from "react";
 import { errorToast } from "../../utils/toasters";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CustomButton from "../../components/CustomButton";
 
 const LoginFormSchema = z
@@ -18,6 +18,7 @@ const LoginFormSchema = z
 type LoginFormFields = z.infer<typeof LoginFormSchema>;
 
 const SignupForm = () => {
+    const navigate = useNavigate();
     const [validating, setValidating] = useState(false);
     const [fields, setFields] = useState<LoginFormFields>({
         name: "",
@@ -42,6 +43,9 @@ const SignupForm = () => {
         } finally {
             setValidating(false);
         }
+
+        // Handle signup logic here
+        navigate("/app");
     };
     return (
         <form
