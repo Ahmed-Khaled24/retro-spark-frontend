@@ -3,7 +3,7 @@ import AuthLayout from "../layouts/AuthLayout";
 import LoginPage from "../pages/Login";
 import SignupPage from "../pages/Signup";
 import LoggedInLayout from "../layouts/LoggedInLayout";
-import BoardsGridPage from "../pages/BoardsGrid";
+import BoardsPage from "../pages/Boards";
 
 export const router = createBrowserRouter([
     {
@@ -12,7 +12,7 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                Component: BoardsGridPage,
+                Component: BoardsPage,
             },
             {
                 path: "/app/teams",

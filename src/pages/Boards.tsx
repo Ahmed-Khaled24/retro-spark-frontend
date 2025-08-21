@@ -1,7 +1,7 @@
 import PageHeader from "../components/PageHeader";
-import BoardsGrid from "../features/boards/BoardsGrid";
+import BoardsGrid from "../features/boards/components/BoardsGrid";
 
-const BoardsGridPage = () => {
+const BoardsPage = () => {
     return (
         <div className="flex flex-col gap-10">
             <PageHeader title="Boards" />
@@ -10,4 +10,4 @@ const BoardsGridPage = () => {
     );
 };
 
-export default BoardsGridPage;
+export default BoardsPage;
