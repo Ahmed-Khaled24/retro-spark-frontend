@@ -11,6 +11,7 @@ interface CustomButtonProps {
     className?: string;
     loading?: boolean;
     rounded?: boolean;
+    outlined?: boolean;
     onClick?: () => void;
 }
 const CustomButton: FC<CustomButtonProps> = ({
@@ -19,6 +20,7 @@ const CustomButton: FC<CustomButtonProps> = ({
     className,
     loading,
     rounded = false,
+    outlined = false,
     buttonType = "button",
     ...other
 }) => {
@@ -29,6 +31,8 @@ const CustomButton: FC<CustomButtonProps> = ({
         className,
         {
             "rounded-full": rounded,
+            "text-primary! bg-primary/10 border-1 border-primary hover:bg-primary/20!":
+                outlined,
         },
     );
 
