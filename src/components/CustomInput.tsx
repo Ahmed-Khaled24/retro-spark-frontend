@@ -26,7 +26,7 @@ const CustomInput: FC<CustomInputProps> = ({
     };
 
     const wrapperClasses = clsx(
-        "relative flex flex-col gap-1",
+        "relative flex flex-col gap-2",
         {
             "bg-white": labelPosition === "embedded" && background === "white",
             "bg-transparent":
