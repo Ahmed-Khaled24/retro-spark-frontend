@@ -8,7 +8,7 @@ import Dropdown from "../components/Dropdown";
 
 export const PublicNavbar = () => {
     return (
-        <nav className="flex py-4">
+        <nav className="flex py-4 w-12">
             <img src="/logo.svg" alt="logo" />
         </nav>
     );
@@ -20,19 +20,19 @@ export const LoggedInNavbar = () => {
 
     const [links, setLinks] = useState([
         {
-            icon: <GoHomeFill size={32} />,
+            icon: <GoHomeFill size={28} />,
             path: "/app",
             tooltip: "Boards",
             active: false,
         },
         {
-            icon: <GoPeople size={32} />,
+            icon: <GoPeople size={28} />,
             path: "/app/teams",
             tooltip: "Teams",
             active: false,
         },
         {
-            icon: <FaGear size={32} />,
+            icon: <FaGear size={28} />,
             path: "/app/settings",
             tooltip: "Settings",
             active: false,
@@ -54,14 +54,14 @@ export const LoggedInNavbar = () => {
             <img
                 src="/logo.svg"
                 alt="logo"
-                className="pb-8 border-b-1 border-primary-border"
+                className="pb-8 border-b-1 border-primary-border w-12"
             />
             <nav className="flex flex-col gap-12 items-center pt-12">
                 {links.map((link) => (
                     <Link
                         to={link.path}
                         key={link.path}
-                        className={clsx("text-gray-500", {
+                        className={clsx("text-gray-500 hover:text-primary", {
                             "text-primary": link.active,
                         })}
                     >
