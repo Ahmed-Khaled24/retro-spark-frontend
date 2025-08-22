@@ -7,6 +7,7 @@ import { Oval } from "react-loader-spinner";
 interface CustomButtonProps {
     children: ReactNode;
     buttonType?: "button" | "submit";
+    variant?: "primary" | "secondary" | "success" | "plain";
     link?: string;
     className?: string;
     loading?: boolean;
@@ -22,17 +23,29 @@ const CustomButton: FC<CustomButtonProps> = ({
     rounded = false,
     outlined = false,
     buttonType = "button",
+    variant = "primary",
     ...other
 }) => {
     const classes = clsx(
         "text-white font-semibold text-center",
-        "bg-primary cursor-pointer flex gap-2 items-center justify-center px-10 py-2",
-        "hover:bg-primary/75 transition-colors duration-300 ease-in-out",
+        "cursor-pointer flex gap-2 items-center justify-center px-10 py-2",
+        "transition-colors duration-250 ease-in-out",
         className,
         {
             "rounded-full": rounded,
-            "text-primary! bg-primary/10 border-1 border-primary hover:bg-primary/20!":
-                outlined,
+            "border-1": outlined,
+            "bg-primary hover:bg-primary/75": variant === "primary",
+            "bg-secondary hover:bg-secondary/75": variant === "secondary",
+            "bg-success hover:bg-success/75": variant === "success",
+            "bg-plain hover:bg-plain/75": variant === "plain",
+            "bg-primary/10 hover:bg-primary/20! text-primary! border-primary":
+                outlined && variant === "primary",
+            "bg-secondary/10 hover:bg-secondary/20! text-secondary! border-secondary":
+                outlined && variant === "secondary",
+            "bg-success/10 hover:bg-success/20! text-success! border-success":
+                outlined && variant === "success",
+            "bg-plain/10 hover:bg-plain/20! text-black/50! border-plain":
+                outlined && variant === "plain",
         },
     );
 
