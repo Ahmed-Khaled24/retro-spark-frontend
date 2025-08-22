@@ -50,20 +50,24 @@ export const LoggedInNavbar = () => {
     }, [location]);
 
     return (
-        <aside className="flex flex-col p-4 h-full">
+        <aside className="flex flex-col py-4 px-3 h-full">
             <img
                 src="/logo.svg"
                 alt="logo"
-                className="pb-8 border-b-1 border-primary-border w-12"
+                className="pb-8 border-b-1 border-primary-border w-12 mx-auto"
             />
-            <nav className="flex flex-col gap-12 items-center pt-12">
+            <nav className="flex flex-col gap-8 items-center pt-12">
                 {links.map((link) => (
                     <Link
                         to={link.path}
                         key={link.path}
-                        className={clsx("text-gray-500 hover:text-primary", {
-                            "text-primary": link.active,
-                        })}
+                        className={clsx(
+                            "text-gray-500 hover:text-primary hover:bg-primary/10 p-3 rounded-lg transition-all duration-250",
+                            {
+                                "text-primary": link.active,
+                                "bg-primary/10": link.active,
+                            },
+                        )}
                     >
                         {link.icon}
                     </Link>
