@@ -38,7 +38,7 @@ const BoardCard: FC<BoardDto> = (board) => {
 
     return (
         <Link
-            to={`/app/boards/${board.id}`}
+            to={`/app/board/${board.id}`}
             className="border-1 border-primary-border rounded-lg flex flex-col h-[325px] p-1 shadow-xs"
         >
             <img

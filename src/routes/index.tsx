@@ -4,6 +4,7 @@ import LoginPage from "../pages/Login";
 import SignupPage from "../pages/Signup";
 import LoggedInLayout from "../layouts/LoggedInLayout";
 import BoardsPage from "../pages/Boards";
+import BoardPage from "../pages/Board";
 
 export const router = createBrowserRouter([
     {
@@ -15,12 +16,16 @@ export const router = createBrowserRouter([
                 Component: BoardsPage,
             },
             {
-                path: "/app/teams",
+                path: "teams",
                 Component: () => <div>Teams Page</div>, // Placeholder for Teams page
             },
             {
-                path: "/app/settings",
+                path: "settings",
                 Component: () => <div>Settings Page</div>, // Placeholder for Settings page
+            },
+            {
+                path: "board/:id",
+                Component: BoardPage,
             },
         ],
     },
