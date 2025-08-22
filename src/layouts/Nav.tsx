@@ -3,8 +3,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GoHomeFill, GoPeople } from "react-icons/go";
 import { FaGear } from "react-icons/fa6";
 import clsx from "clsx";
-import DefaultUserAvatar from "../components/DefaultUserAvatar";
 import Dropdown from "../components/Dropdown";
+import DefaultAvatar from "../components/DefaultAvatar";
 
 export const PublicNavbar = () => {
     return (
@@ -78,7 +78,10 @@ export const LoggedInNavbar = () => {
                 <Dropdown
                     menuClassName="translate-y-[-5px] bg-white"
                     mainButtonContent={
-                        <DefaultUserAvatar username="Ahmed Khaled" />
+                        <DefaultAvatar
+                            name="Ahmed Khaled"
+                            variant="secondary"
+                        />
                     }
                     items={[
                         {
