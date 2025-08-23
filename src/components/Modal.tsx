@@ -31,9 +31,10 @@ export const Modal: FC<ModalProps> = ({
 
     return (
         <Dialog
+            className="relative z-50 transition data-closed:opacity-0 duration-200"
             open={isOpen}
             onClose={() => toggleOpen(false)}
-            className="relative z-50"
+            transition
         >
             <div className="w-screen h-screen fixed inset-0 bg-black/75 backdrop-blur-xs flex items-center justify-center">
                 <DialogPanel className={classes}>

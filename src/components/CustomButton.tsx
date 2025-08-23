@@ -35,12 +35,13 @@ const CustomButton: FC<CustomButtonProps> = ({
             "rounded-full": rounded,
             "border-1": outlined,
             "bg-primary hover:bg-primary/75": variant === "primary",
-            "bg-secondary hover:bg-secondary/75": variant === "secondary",
+            "bg-secondary hover:bg-secondary/75 text-black!":
+                variant === "secondary",
             "bg-success hover:bg-success/75": variant === "success",
             "bg-plain hover:bg-plain/75": variant === "plain",
             "bg-primary/10 hover:bg-primary/20! text-primary! border-primary":
                 outlined && variant === "primary",
-            "bg-secondary/10 hover:bg-secondary/20! text-secondary! border-secondary":
+            "bg-secondary/35 hover:bg-secondary/60! border-secondary text-black!":
                 outlined && variant === "secondary",
             "bg-success/10 hover:bg-success/20! text-success! border-success":
                 outlined && variant === "success",

@@ -12,7 +12,7 @@ const Badge: FC<BadgeProps> = ({
     extraClasses,
 }) => {
     const badgeClasses = clsx(
-        "text-xs border-1 px-3 py-0.5 rounded-full leading-[1.5]",
+        "text-xs border-1 px-3 py-0.5 rounded-full leading-[1.5] select-none",
         {
             "border-secondary text-primary bg-secondary/10":
                 variant === "secondary",
