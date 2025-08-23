@@ -1,9 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
-import CustomInput from "../../components/CustomInput";
-import CustomButton from "../../components/CustomButton";
+import CustomInput from "../../../components/CustomInput";
+import CustomButton from "../../../components/CustomButton";
 import { z } from "zod";
 import { useState } from "react";
-import { errorToast } from "../../utils/toasters";
+import { errorToast } from "../../../utils/toasters";
 
 const LoginFormSchema = z.object({
     email: z.email(),

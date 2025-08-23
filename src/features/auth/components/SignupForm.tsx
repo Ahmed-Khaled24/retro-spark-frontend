@@ -1,9 +1,9 @@
 import z from "zod";
-import CustomInput from "../../components/CustomInput";
+import CustomInput from "../../../components/CustomInput";
 import { useState } from "react";
-import { errorToast } from "../../utils/toasters";
+import { errorToast } from "../../../utils/toasters";
 import { Link, useNavigate } from "react-router-dom";
-import CustomButton from "../../components/CustomButton";
+import CustomButton from "../../../components/CustomButton";
 
 const LoginFormSchema = z
     .object({
