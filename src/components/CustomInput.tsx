@@ -18,7 +18,7 @@ const CustomInput: FC<CustomInputProps> = ({
     wrapperClassName,
     ...other
 }) => {
-    const [hasText, setHasText] = useState(false);
+    const [hasText, setHasText] = useState(!!other.value);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setHasText(e.target.value.length > 0);
