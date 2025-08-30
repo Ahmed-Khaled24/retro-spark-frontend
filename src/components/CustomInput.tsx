@@ -7,6 +7,7 @@ interface CustomInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     rounded?: string;
     background?: "white" | "transparent";
     labelPosition?: "embedded" | "separate";
+    error?: string;
     wrapperClassName?: string;
 }
 
@@ -15,6 +16,7 @@ const CustomInput: FC<CustomInputProps> = ({
     rounded = "rounded-none",
     background = "transparent",
     labelPosition = "separate",
+    error = "",
     wrapperClassName,
     ...other
 }) => {
@@ -26,7 +28,7 @@ const CustomInput: FC<CustomInputProps> = ({
     };
 
     const wrapperClasses = clsx(
-        "relative flex flex-col gap-2",
+        "relative flex flex-col gap-1",
         {
             "bg-white": labelPosition === "embedded" && background === "white",
             "bg-transparent":
@@ -43,13 +45,14 @@ const CustomInput: FC<CustomInputProps> = ({
         "opacity-50": labelPosition === "embedded",
     });
 
-    const inputClasses = clsx("p-3 text-sm", {
+    const inputClasses = clsx("p-3 text-sm focus-visible:outline-none", {
         "p-4": labelPosition === "embedded",
         "pt-6 pb-2": labelPosition === "embedded" && hasText,
         "bg-white": labelPosition === "separate" && background === "white",
         "bg-transparent":
             labelPosition === "separate" && background === "transparent",
         "border-primary-border border-1": labelPosition === "separate",
+        "border-red-600! border-1": error,
         [`${rounded}`]: labelPosition === "separate" && !!rounded,
     });
 
@@ -64,6 +67,9 @@ const CustomInput: FC<CustomInputProps> = ({
                 }
                 onChange={handleChange}
             />
+            <p className=" absolute bottom-0 left-0 translate-y-[110%] text-sm -mt-1 text-red-600! ml-1">
+                {error}
+            </p>
         </Field>
     );
 };
