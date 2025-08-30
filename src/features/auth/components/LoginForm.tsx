@@ -1,19 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
 import CustomInput from "../../../components/CustomInput";
 import CustomButton from "../../../components/CustomButton";
-import { z } from "zod";
 import { useState } from "react";
-import { errorToast } from "../../../utils/toasters";
-
-const LoginFormSchema = z.object({
-    email: z.email(),
-    password: z.string().min(8).max(100),
-});
-type LoginFormFields = z.infer<typeof LoginFormSchema>;
+import { errorToast, infoToast } from "../../../utils/toasters";
+import { LoginFormSchema, type LoginFormFields } from "../dtos/login.dto";
+import { useLoginMutation } from "../AuthApi";
+import { useValidateForm } from "../../../hooks/useValidateForm";
 
 export const LoginForm = () => {
     const navigate = useNavigate();
-    const [validating, setValidating] = useState(false);
+    const [login, { isLoading }] = useLoginMutation();
+    const { validate, fieldErrors } = useValidateForm(LoginFormSchema);
     const [fields, setFields] = useState<LoginFormFields>({
         email: "",
         password: "",
@@ -21,23 +18,17 @@ export const LoginForm = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setValidating(true);
-        try {
-            await LoginFormSchema.parseAsync(fields);
-        } catch (error) {
-            if (error instanceof z.ZodError) {
-                const messages = error.issues.map(
-                    (e) => `${e.path.join(".")}: ${e.message}`,
-                );
-                errorToast(messages.join("\n"));
-                return;
-            }
-        } finally {
-            setValidating(false);
-        }
 
-        // Handle login logic here
-        navigate("/app");
+        const isValid = await validate(fields);
+        if (!isValid) return;
+
+        await login({
+            email: fields.email,
+            password: fields.password,
+        })
+            .unwrap()
+            .then(() => navigate("/app"))
+            .catch(() => errorToast("Something went wrong!"));
     };
 
     return (
@@ -54,6 +45,8 @@ export const LoginForm = () => {
                 onChange={(e) =>
                     setFields({ ...fields, email: e.target.value })
                 }
+                error={fieldErrors["email"]?.at(0)}
+                required
             />
             <CustomInput
                 label="Password"
@@ -64,11 +57,17 @@ export const LoginForm = () => {
                 onChange={(e) =>
                     setFields({ ...fields, password: e.target.value })
                 }
+                error={fieldErrors["password"]?.at(0)}
+                required
             />
-            <Link to={"#"} className="text-black/50 underline">
+            <Link
+                to={"#"}
+                className="text-black/50 underline"
+                onClick={() => infoToast("Not implemented yet!")}
+            >
                 Forgot password?
             </Link>
-            <CustomButton rounded loading={validating} buttonType="submit">
+            <CustomButton rounded loading={isLoading} buttonType="submit">
                 Continue
             </CustomButton>
             <p className="text-black/50 flex gap-1">
