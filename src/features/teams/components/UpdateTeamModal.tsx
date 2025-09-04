@@ -1,35 +1,45 @@
 import { useState, type FC } from "react";
 import { Modal, type ModalProps } from "../../../components/Modal";
+import {
+    UpdateTeamSchema,
+    type TeamDto,
+    type UpdateTeamDto,
+} from "../dtos/team.dto";
 import CustomButton from "../../../components/CustomButton";
 import CustomInput from "../../../components/CustomInput";
-import { useCreateTeamMutation } from "../TeamsApi";
-import { CreateTeamSchema, type CreateTeamDto } from "../dtos/team.dto";
 import { useValidateForm } from "../../../hooks/useValidateForm";
+import { useUpdateTeamMutation } from "../TeamsApi";
 import { successToast } from "../../../utils/toasters";
 
-interface CreateTeamModalProps
-    extends Pick<ModalProps, "isOpen" | "toggleOpen"> {}
+interface UpdateTeamModalProps
+    extends Pick<ModalProps, "isOpen" | "toggleOpen"> {
+    team: TeamDto;
+}
 
-export const CreateTeamModal: FC<CreateTeamModalProps> = ({
+export const UpdateTeamModal: FC<UpdateTeamModalProps> = ({
+    team,
     isOpen,
     toggleOpen,
 }) => {
-    const [createTeam, { isLoading }] = useCreateTeamMutation();
-    const { validate, fieldErrors } = useValidateForm(CreateTeamSchema);
-    const [fields, setFields] = useState<CreateTeamDto>({
-        title: "",
+    const [updateTeam, { isLoading }] = useUpdateTeamMutation();
+    const [fields, setFields] = useState<UpdateTeamDto>({
+        title: team.title,
     });
+    const { validate, fieldErrors } = useValidateForm(UpdateTeamSchema);
 
-    const handleCreateTeam = async () => {
+    const handleUpdateTeam = async () => {
         await validate(fields);
-        await createTeam(fields).unwrap();
+        await updateTeam({
+            id: team.id,
+            data: fields,
+        }).unwrap();
         toggleOpen(false);
-        successToast("Team created successfully!");
+        successToast("Team updated successfully!");
     };
 
     return (
         <Modal
-            title={`Create a team`}
+            title={`Edit team title`}
             isOpen={isOpen}
             toggleOpen={toggleOpen}
             wrapperClasses="px-2"
@@ -47,11 +57,11 @@ export const CreateTeamModal: FC<CreateTeamModalProps> = ({
                 />
                 <div className="flex flex-row-reverse gap-2">
                     <CustomButton
-                        onClick={handleCreateTeam}
-                        loading={isLoading}
+                        onClick={handleUpdateTeam}
                         className="rounded-lg w-32"
+                        loading={isLoading}
                     >
-                        Create
+                        Save
                     </CustomButton>
                     <CustomButton
                         onClick={() => toggleOpen(false)}

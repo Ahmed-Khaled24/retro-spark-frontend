@@ -6,7 +6,7 @@ import { FiEdit } from "react-icons/fi";
 import { GoTrash } from "react-icons/go";
 import { FaUserGear } from "react-icons/fa6";
 import { DeleteTeamModal } from "./DeleteTeamModal";
-import { EditTeamModal } from "./EditTeamNameModal";
+import { UpdateTeamModal } from "./UpdateTeamModal";
 
 const TeamItem: FC<TeamDto> = (team) => {
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
@@ -21,7 +21,7 @@ const TeamItem: FC<TeamDto> = (team) => {
                     setDeleteModalIsOpen((prev) => newState ?? !prev)
                 }
             />
-            <EditTeamModal
+            <UpdateTeamModal
                 team={team}
                 isOpen={editModalIsOpen}
                 toggleOpen={(newState?: boolean) =>
