@@ -5,6 +5,10 @@ import { FaGear } from "react-icons/fa6";
 import clsx from "clsx";
 import Dropdown from "../components/Dropdown";
 import DefaultAvatar from "../components/DefaultAvatar";
+import {
+    useGetCurrentUserQuery,
+    useLogoutMutation,
+} from "../features/auth/AuthApi";
 
 export const PublicNavbar = () => {
     return (
@@ -17,6 +21,8 @@ export const PublicNavbar = () => {
 export const LoggedInNavbar = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { data: currentUser } = useGetCurrentUserQuery();
+    const [logout] = useLogoutMutation();
 
     const [links, setLinks] = useState([
         {
@@ -40,7 +46,6 @@ export const LoggedInNavbar = () => {
     ]);
 
     useEffect(() => {
-        console.log();
         setLinks((prevLinks) =>
             prevLinks.map((link) => ({
                 ...link,
@@ -48,6 +53,13 @@ export const LoggedInNavbar = () => {
             })),
         );
     }, [location]);
+
+    const handleLogout = () => {
+        logout()
+            .unwrap()
+            .then(() => navigate("/auth/login"))
+            .catch((e) => console.error(e));
+    };
 
     return (
         <aside className="flex flex-col py-4 px-3 h-full">
@@ -76,17 +88,17 @@ export const LoggedInNavbar = () => {
             {/* User Avatar */}
             <div className="mt-auto mx-auto">
                 <Dropdown
-                    menuClassName="translate-y-[-5px] bg-white"
+                    menuClassName="translate-y-[-5px] bg-white shadow-lg"
                     mainButtonContent={
                         <DefaultAvatar
-                            name="Ahmed Khaled"
+                            name={currentUser!?.name ?? "...."}
                             variant="secondary"
                         />
                     }
                     items={[
                         {
                             content: "Logout",
-                            onClick: () => navigate("/auth/login"),
+                            onClick: handleLogout,
                         },
                     ]}
                     anchor="top start"
