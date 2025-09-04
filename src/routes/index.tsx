@@ -7,31 +7,37 @@ import BoardsPage from "../pages/Boards";
 import BoardPage from "../pages/Board";
 import TeamsPage from "../pages/Teams";
 import TeamPage from "../pages/Team";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 export const router = createBrowserRouter([
     {
         path: "/app",
-        Component: LoggedInLayout,
+        Component: ProtectedRoute,
         children: [
             {
-                index: true,
-                Component: BoardsPage,
-            },
-            {
-                path: "teams",
-                Component: TeamsPage,
-            },
-            {
-                path: "settings",
-                Component: () => <div>Settings Page</div>, // Placeholder for Settings page
-            },
-            {
-                path: "board/:id",
-                Component: BoardPage,
-            },
-            {
-                path: "team/:id",
-                Component: TeamPage,
+                Component: LoggedInLayout,
+                children: [
+                    {
+                        index: true,
+                        Component: BoardsPage,
+                    },
+                    {
+                        path: "teams",
+                        Component: TeamsPage,
+                    },
+                    {
+                        path: "settings",
+                        Component: () => <div>Settings Page</div>, // Placeholder for Settings page
+                    },
+                    {
+                        path: "board/:id",
+                        Component: BoardPage,
+                    },
+                    {
+                        path: "team/:id",
+                        Component: TeamPage,
+                    },
+                ],
             },
         ],
     },
