@@ -2,36 +2,39 @@ import type { UserDto } from "./dtos/user.dto";
 import type { SignupDto } from "./dtos/signup.dto";
 import type { LoginDto } from "./dtos/login.dto";
 import { appApi } from "../../app/api";
-import { vanillaFetch } from "../../utils/fetch";
+import { fetchWithAutoRefresh } from "../../utils/fetch";
+import type { QueryReturnValue } from "@reduxjs/toolkit/query";
+import { Constants } from "../../utils/constants";
 
 export const authApi = appApi.injectEndpoints({
     endpoints: ({ mutation, query }) => ({
         getCurrentUser: query<UserDto, void>({
             queryFn: async (_, baseQueryApi) => {
                 // Hit localstorage to find if there is a user logged in.
-                const userFromLocalStorage = localStorage.getItem("user");
-                if (userFromLocalStorage) {
-                    return {
-                        data: JSON.parse(userFromLocalStorage) as UserDto,
-                    } as any;
-                }
-
-                const result = await vanillaFetch(
-                    {
-                        url: "users/me",
-                        method: "GET",
-                    },
-                    baseQueryApi,
-                    {},
+                const userFromLocalStorage = localStorage.getItem(
+                    Constants.LocalStorageKeys.USER,
                 );
-
-                if (result.data) {
-                    // Persist the user in localstorage between reloads.
-                    localStorage.setItem("user", JSON.stringify(result.data));
-                    return { data: result.data as UserDto };
+                if (userFromLocalStorage) {
+                    const user = JSON.parse(userFromLocalStorage) as UserDto;
+                    return { data: user };
                 }
+                const result: QueryReturnValue<any> =
+                    await fetchWithAutoRefresh(
+                        {
+                            url: "users/me",
+                            method: "GET",
+                        },
+                        baseQueryApi,
+                        {},
+                    );
 
-                return { error: result.error };
+                // Persist the user in localstorage between reloads.
+                localStorage.setItem(
+                    Constants.LocalStorageKeys.USER,
+                    JSON.stringify(result.data.data),
+                );
+                const user = result.data as UserDto;
+                return { data: user };
             },
             providesTags: ["Auth"],
         }),
@@ -57,7 +60,7 @@ export const authApi = appApi.injectEndpoints({
             invalidatesTags: ["Auth"],
             async onQueryStarted(_, { queryFulfilled }) {
                 await queryFulfilled;
-                localStorage.removeItem("user");
+                localStorage.removeItem(Constants.LocalStorageKeys.USER);
             },
         }),
         refreshToken: mutation<UserDto, void>({
