@@ -9,7 +9,7 @@ export const vanillaFetch = fetchBaseQuery({
     credentials: "include", // To send the cookies
 });
 
-export const fetchWithRefreshToken: BaseQueryFn = async (
+export const fetchWithAutoRefresh: BaseQueryFn = async (
     args: any,
     api: BaseQueryApi,
     extraOptions: any,
@@ -18,10 +18,10 @@ export const fetchWithRefreshToken: BaseQueryFn = async (
     let result = await vanillaFetch(args, api, extraOptions);
 
     /**
-     * If the request fails with a 401 or 403, it means that the token is expired or invalid.
+     * If the request fails with a 401, it means that the token is expired or invalid.
      * In this case, try to refresh the token and execute the request again.
      */
-    if ([401, 403].includes(result?.error?.status as number)) {
+    if ([401].includes(result?.error?.status as number)) {
         // Send a request to the server to refresh the token.
         const refreshResult = await vanillaFetch(
             { url: "/auth/refresh", method: "POST" },
