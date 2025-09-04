@@ -1,8 +1,8 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { vanillaFetch } from "../utils/fetch";
+import { fetchWithAutoRefresh } from "../utils/fetch";
 
 export const appApi = createApi({
-    baseQuery: vanillaFetch,
+    baseQuery: fetchWithAutoRefresh,
     reducerPath: "appApi",
     tagTypes: ["Auth"],
     endpoints: () => ({}),

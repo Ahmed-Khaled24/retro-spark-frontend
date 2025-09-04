@@ -29,11 +29,11 @@ export const authApi = appApi.injectEndpoints({
                     );
 
                 // Persist the user in localstorage between reloads.
+                const user = result.data.data as UserDto;
                 localStorage.setItem(
                     Constants.LocalStorageKeys.USER,
-                    JSON.stringify(result.data.data),
+                    JSON.stringify(user),
                 );
-                const user = result.data as UserDto;
                 return { data: user };
             },
             providesTags: ["Auth"],
