@@ -4,7 +4,9 @@ import CustomTextarea from "../../../components/CustomTextarea";
 import CustomButton from "../../../components/CustomButton";
 import { useParams } from "react-router-dom";
 import { MdContentCopy } from "react-icons/md";
-import { successToast } from "../../../utils/toasters";
+import { errorToast, successToast } from "../../../utils/toasters";
+import z from "zod";
+import { useInviteMemberMutation } from "../../invitations/InvitationsApi";
 
 interface AddMemberModalProps
     extends Pick<ModalProps, "isOpen" | "toggleOpen"> {}
@@ -12,10 +14,28 @@ interface AddMemberModalProps
 const AddMemberModal: FC<AddMemberModalProps> = (props) => {
     const { id } = useParams();
     const [memberEmails, setMemberEmails] = useState("");
+    const [invite, { isLoading }] = useInviteMemberMutation();
 
     const invitationLink = `${import.meta.env.VITE_BASE_URL}/teams/invite?team=${id}`;
 
-    const inviteMembers = () => {
+    const inviteMembers = async () => {
+        const { data: emails, success } = await z.safeParseAsync(
+            z.array(z.email("not a valid email")),
+            memberEmails.split(","),
+        );
+
+        if (!success) {
+            errorToast(
+                "Invalid email detected.\nMake sure all emails are valid.",
+            );
+            return;
+        }
+
+        await invite({
+            emails: emails.join(","),
+            teamId: parseInt(id!),
+        }).unwrap();
+
         setMemberEmails("");
         props.toggleOpen(false);
     };
@@ -63,6 +83,7 @@ const AddMemberModal: FC<AddMemberModalProps> = (props) => {
                         variant="secondary"
                         className="rounded-lg"
                         onClick={inviteMembers}
+                        loading={isLoading}
                     >
                         Invite
                     </CustomButton>
