@@ -43,7 +43,7 @@ const DefaultAvatar: FC<DefaultAvatarProps> = ({
         extraClasses,
     );
 
-    return <div className={classes}>{nameAbbreviation}</div>;
+    return <div className={classes}>{nameAbbreviation.toUpperCase()}</div>;
 };
 
 export default DefaultAvatar;
