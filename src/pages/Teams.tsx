@@ -40,7 +40,7 @@ const TeamsPage = () => {
                                 Create team
                             </CustomButton>
                         </header>
-                        <div className="flex flex-col gap-6 py-8">
+                        <div className="flex flex-col gap-6 py-4 px-8">
                             {teams && teams.length > 0 ? (
                                 teams?.map((team) => <TeamItem {...team} />)
                             ) : (
