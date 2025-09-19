@@ -5,6 +5,10 @@ export interface APIResponse<T> {
     data: T;
 }
 
+export interface APIError<T = string> {
+    message: T;
+}
+
 export const appApi = createApi({
     baseQuery: fetchWithAutoRefresh,
     reducerPath: "appApi",

@@ -8,6 +8,8 @@ import BoardPage from "../pages/Board";
 import TeamsPage from "../pages/Teams";
 import TeamPage from "../pages/Team";
 import ProtectedRoute from "../components/ProtectedRoute";
+import BoardSettingsPage from "../pages/BoardSettings";
+import AcceptInvitationPage from "../pages/AcceptInvitation";
 
 export const router = createBrowserRouter([
     {
@@ -34,8 +36,16 @@ export const router = createBrowserRouter([
                         Component: BoardPage,
                     },
                     {
+                        path: "board/:id/settings",
+                        Component: BoardSettingsPage,
+                    },
+                    {
                         path: "team/:id",
                         Component: TeamPage,
+                    },
+                    {
+                        path: "invitation",
+                        Component: AcceptInvitationPage,
                     },
                 ],
             },
