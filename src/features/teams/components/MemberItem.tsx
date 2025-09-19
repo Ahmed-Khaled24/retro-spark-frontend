@@ -9,14 +9,9 @@ const MemberItem: FC<TeamMemberDto> = (member) => {
     return (
         <div className="py-4 flex items-center justify-between border-b-1 border-primary-border">
             <div className="flex gap-4 items-center">
-                <DefaultAvatar
-                    name={member.user.username}
-                    variant="secondary"
-                />
+                <DefaultAvatar name={member.user.name} variant="secondary" />
                 <div className="flex flex-col">
-                    <span className="font-semibold">
-                        {member.user.username}
-                    </span>
+                    <span className="font-semibold">{member.user.name}</span>
                     <span className="text-sm opacity-50 -mt-1">
                         {member.user.email}
                     </span>
@@ -24,7 +19,7 @@ const MemberItem: FC<TeamMemberDto> = (member) => {
             </div>
             <div className="flex gap-4 items-center">
                 <Badge
-                    content={member.role}
+                    content={member.role.toLowerCase()}
                     variant={
                         member.role === TeamMemberRole.ADMIN
                             ? "primary"

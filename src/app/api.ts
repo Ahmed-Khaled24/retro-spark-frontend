@@ -8,6 +8,6 @@ export interface APIResponse<T> {
 export const appApi = createApi({
     baseQuery: fetchWithAutoRefresh,
     reducerPath: "appApi",
-    tagTypes: ["Auth", "Teams"],
+    tagTypes: ["Auth", "Teams", "Members", "Invitations"],
     endpoints: () => ({}),
 });

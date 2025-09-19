@@ -1,44 +1,22 @@
 import { useParams } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 import CustomButton from "../components/CustomButton";
-import {
-    TeamMemberRole,
-    type TeamMemberDto,
-} from "../features/teams/dtos/team-member.dto";
 import MemberItem from "../features/teams/components/MemberItem";
 import { useState } from "react";
 import AddMemberModal from "../features/teams/components/AddMemberModal";
 import { FiPlus } from "react-icons/fi";
+import { useGetTeamQuery } from "../features/teams/TeamsApi";
+import { useGetMembersQuery } from "../features/teams/TeamMembersApi";
 
 const TeamPage = () => {
     const { id } = useParams();
+    const { data: teamData } = useGetTeamQuery(parseInt(id!));
+    const { data: membersData } = useGetMembersQuery(parseInt(id!));
+
     const [addMemberModalOpen, setAddMemberModalOpen] = useState(false);
-    const members: TeamMemberDto[] = [
-        {
-            user: {
-                id: 1,
-                username: "Ahmed Khaled",
-                email: "Ahmed@gmail.com",
-            },
-            role: TeamMemberRole.ADMIN,
-        },
-        {
-            user: {
-                id: 2,
-                username: "Mohamed Khaled",
-                email: "Mohamed@gmail.com",
-            },
-            role: TeamMemberRole.PARTICIPANT,
-        },
-        {
-            user: {
-                id: 3,
-                username: "Yasser",
-                email: "Yasser@gmail.com",
-            },
-            role: TeamMemberRole.FACILITATOR,
-        },
-    ];
+
+    const team = teamData?.data;
+    const members = membersData?.data ?? [];
 
     return (
         <>
@@ -56,7 +34,7 @@ const TeamPage = () => {
                     <main className="bg-white rounded-xl w-4/5 h-9/10 p-8">
                         <header className="flex items-center justify-between border-b-1 border-primary-border pb-4">
                             <h1 className="text-xl font-semibold">
-                                Team title with id {id}
+                                {team?.title}
                             </h1>
                             <CustomButton
                                 className="px-6!"
@@ -68,7 +46,7 @@ const TeamPage = () => {
                             </CustomButton>
                         </header>
                         <div className="flex flex-col gap-6 py-8">
-                            {members.map((member) => (
+                            {members?.map((member) => (
                                 <MemberItem {...member} />
                             ))}
                         </div>
