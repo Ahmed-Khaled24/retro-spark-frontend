@@ -7,10 +7,16 @@ import { GoTrash } from "react-icons/go";
 import { FaUserGear } from "react-icons/fa6";
 import { DeleteTeamModal } from "./DeleteTeamModal";
 import { UpdateTeamModal } from "./UpdateTeamModal";
+import Authorize from "../../../components/Authorize";
+import useGetUserTeamRole from "../../../hooks/useGetUserTeamRole";
+import { TeamMemberRole } from "../dtos/team-member.dto";
 
 const TeamItem: FC<TeamDto> = (team) => {
+    const currentUserRole = useGetUserTeamRole(team.id);
+
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
     const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+
     return (
         <>
             {/* Modals */}
@@ -30,30 +36,35 @@ const TeamItem: FC<TeamDto> = (team) => {
             />
 
             {/* Item */}
-            <div className="py-4 flex items-center justify-between border-b-1 border-primary-border">
+            <div className="py-4 flex items-center justify-between border-b-1 border-primary-border/50">
                 <div className="flex gap-4 items-center">
                     <DefaultAvatar name={team.title} variant="success" />
                     <span className="font-semibold">{team.title}</span>
                 </div>
                 <div className="flex gap-2">
-                    <CustomButton
-                        className="w-12 h-12 p-0!"
-                        variant="plain"
-                        onClick={() => setEditModalIsOpen(true)}
-                        rounded
-                        outlined
+                    <Authorize
+                        allowedRoles={[TeamMemberRole.OWNER]}
+                        currentRole={currentUserRole}
                     >
-                        <FiEdit />
-                    </CustomButton>
-                    <CustomButton
-                        className="w-12 h-12 p-0!"
-                        variant="plain"
-                        onClick={() => setDeleteModalIsOpen(true)}
-                        rounded
-                        outlined
-                    >
-                        <GoTrash />
-                    </CustomButton>
+                        <CustomButton
+                            className="w-12 h-12 p-0!"
+                            variant="plain"
+                            onClick={() => setEditModalIsOpen(true)}
+                            rounded
+                            outlined
+                        >
+                            <FiEdit />
+                        </CustomButton>
+                        <CustomButton
+                            className="w-12 h-12 p-0!"
+                            variant="plain"
+                            onClick={() => setDeleteModalIsOpen(true)}
+                            rounded
+                            outlined
+                        >
+                            <GoTrash />
+                        </CustomButton>
+                    </Authorize>
                     <CustomButton
                         variant="plain"
                         rounded
