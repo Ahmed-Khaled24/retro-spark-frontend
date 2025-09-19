@@ -1,7 +1,7 @@
 import type { UserDto } from "../../auth/dtos/user.dto";
 
 export enum TeamMemberRole {
-    ADMIN = "ADMIN",
+    OWNER = "OWNER",
     PARTICIPANT = "PARTICIPANT",
     FACILITATOR = "FACILITATOR",
 }
