@@ -15,21 +15,38 @@ interface CustomSelectProps {
     options: string[];
     value: string;
     onChange: (newValue: string) => void;
+    mainButtonExtraClasses?: string;
+    menuItemsExtraClasses?: string;
 }
 
 const CustomSelect: FC<CustomSelectProps> = ({
     label,
     options,
     value,
+    mainButtonExtraClasses,
+    menuItemsExtraClasses,
     onChange,
 }) => {
+    const mainButtonClasses = clsx(
+        mainButtonExtraClasses,
+        "flex items-center",
+        "border-primary-border border-1",
+        "p-3 rounded-lg cursor-pointer text-sm",
+    );
+
+    const menuItemsClasses = clsx(
+        menuItemsExtraClasses,
+        "bg-white rounded-lg border-1 border-primary-border mt-1 w-(--button-width) shadow-lg",
+        "transition duration-200 data-closed:translate-y-10 data-closed:opacity-0",
+    );
+
     return (
-        <Field className="flex flex-col gap-2 w-full">
+        <Field className="flex flex-col gap-1 w-full">
             {label && <Label>{label}</Label>}
             <Menu>
                 {({ open }) => (
                     <>
-                        <MenuButton className="flex items-center border-primary-border border-1 p-3 rounded-lg cursor-pointer text-sm">
+                        <MenuButton className={mainButtonClasses}>
                             <span>{value}</span>
                             <MdKeyboardArrowLeft
                                 size={18}
@@ -39,14 +56,15 @@ const CustomSelect: FC<CustomSelectProps> = ({
                             />
                         </MenuButton>
                         <MenuItems
+                            transition
                             anchor="bottom start"
-                            className="bg-white rounded-lg border-1 border-primary-border mt-1 w-(--button-width)"
+                            className={menuItemsClasses}
                         >
                             {options.map((option) => (
                                 <MenuItem>
                                     <div
                                         onClick={() => onChange(option)}
-                                        className="py-2 px-4 cursor-pointer data-focus:bg-primary/10 text-sm "
+                                        className="py-2 px-4 cursor-pointer data-focus:bg-primary/10 text-sm"
                                     >
                                         {option}
                                     </div>
