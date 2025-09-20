@@ -39,7 +39,8 @@ export const InvitationItem: FC<InvitationDto> = (invitation) => {
                 />
                 <Dropdown
                     anchor="bottom end"
-                    menuClassName="bg-white text-sm rounded-lg shadow-xl"
+                    itemsClassName="p-1 rounded-lg"
+                    menuClassName="bg-white text-sm rounded-xl shadow-xl p-1"
                     mainButtonContent={
                         <HiOutlineDotsVertical
                             size={24}
