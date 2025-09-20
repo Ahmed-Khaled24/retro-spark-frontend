@@ -38,7 +38,7 @@ const Dropdown: FC<DropdownProps> = ({
     const generateItemClassName = (item: DropdownItem) => {
         const isString = typeof item.content === "string";
         return clsx(
-            "hover:bg-gray-100 cursor-pointer",
+            "data-focus:bg-primary/10 cursor-pointer data-disabled:opacity-50 data-disabled:cursor-not-allowed",
             {
                 "px-6": isString,
                 "py-2": isString,
