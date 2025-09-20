@@ -1,11 +1,11 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
-import { Oval } from "react-loader-spinner";
 import { useEffect } from "react";
 import { useAcceptInvitationMutation } from "../features/invitations/InvitationsApi";
 import { errorToast, successToast } from "../utils/toasters";
 import type { APIError } from "../app/api";
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import OvalLoader from "../components/OvalLoader";
 
 const AcceptInvitation = () => {
     const navigate = useNavigate();
@@ -36,18 +36,7 @@ const AcceptInvitation = () => {
                 <PageHeader title={`Accepting invitation...`} />
             </div>
             <div className="flex items-center justify-center flex-1">
-                <Oval
-                    height={80}
-                    width={80}
-                    color="#ff6f61"
-                    wrapperStyle={{}}
-                    wrapperClass=""
-                    visible={true}
-                    ariaLabel="oval-loading"
-                    secondaryColor="#ff6f61"
-                    strokeWidth={2}
-                    strokeWidthSecondary={2}
-                />
+                <OvalLoader size={80} />
             </div>
         </div>
     );

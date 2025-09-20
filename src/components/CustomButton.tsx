@@ -2,7 +2,7 @@ import { Button } from "@headlessui/react";
 import clsx from "clsx";
 import { type FC, type ReactNode } from "react";
 import { Link } from "react-router";
-import { Oval } from "react-loader-spinner";
+import OvalLoader from "./OvalLoader";
 
 interface CustomButtonProps {
     children: ReactNode;
@@ -53,7 +53,7 @@ const CustomButton: FC<CustomButtonProps> = ({
     if (loading) {
         return (
             <Button className={classes} {...other} disabled={loading}>
-                <Oval color="white" height={24} strokeWidth={4} />
+                <OvalLoader color="white" size={24} strokeWidth={4} />
             </Button>
         );
     }
