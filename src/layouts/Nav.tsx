@@ -9,6 +9,7 @@ import {
     useGetCurrentUserQuery,
     useLogoutMutation,
 } from "../features/auth/AuthApi";
+import { TbLogout2 } from "react-icons/tb";
 
 export const PublicNavbar = () => {
     return (
@@ -88,7 +89,8 @@ export const LoggedInNavbar = () => {
             {/* User Avatar */}
             <div className="mt-auto mx-auto">
                 <Dropdown
-                    menuClassName="translate-y-[-5px] bg-white shadow-lg"
+                    itemsClassName="rounded-lg"
+                    menuClassName="bg-white rounded-xl shadow-xl p-1 translate-y-[-5px]"
                     mainButtonContent={
                         <DefaultAvatar
                             name={currentUser!?.name ?? "...."}
@@ -97,7 +99,12 @@ export const LoggedInNavbar = () => {
                     }
                     items={[
                         {
-                            content: "Logout",
+                            content: (
+                                <div className="flex items-center gap-2 py-2 px-4">
+                                    <TbLogout2 width={24} />
+                                    <span>Logout</span>
+                                </div>
+                            ),
                             onClick: handleLogout,
                         },
                     ]}
