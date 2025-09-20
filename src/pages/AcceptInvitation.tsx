@@ -23,7 +23,7 @@ const AcceptInvitation = () => {
             .unwrap()
             .then(() => {
                 successToast("Invitation accepted successfully!");
-                navigate(`app/teams`);
+                navigate(`/app/teams`);
             })
             .catch((e: FetchBaseQueryError) => {
                 errorToast((e.data as APIError).message);
