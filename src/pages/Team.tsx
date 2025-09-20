@@ -3,7 +3,7 @@ import PageHeader from "../components/PageHeader";
 import CustomButton from "../components/CustomButton";
 import MemberItem from "../features/teams/components/MemberItem";
 import { useState, type JSX } from "react";
-import AddMemberModal from "../features/teams/components/AddMemberModal";
+import InviteMembersModal from "../features/teams/components/InviteMembersModal";
 import { FiPlus } from "react-icons/fi";
 import { useGetTeamQuery } from "../features/teams/TeamsApi";
 import { useGetMembersQuery } from "../features/teams/TeamMembersApi";
@@ -31,7 +31,7 @@ const TeamPage = () => {
     const members = membersData?.data ?? [];
     const invitations = invitationsData?.data ?? [];
 
-    const allowedRoles = [TeamMemberRole.OWNER, TeamMemberRole.FACILITATOR];
+    const allowedRoles = [TeamMemberRole.OWNER, TeamMemberRole.ADMIN];
     const currentUserRole = useGetUserTeamRole(parseInt(id!));
 
     const membersSectionClasses = clsx("flex flex-col", {
@@ -76,12 +76,13 @@ const TeamPage = () => {
     return (
         <>
             {/* Modals */}
-            <AddMemberModal
+            <InviteMembersModal
                 isOpen={addMemberModalOpen}
                 toggleOpen={(nextState?: boolean) =>
                     setAddMemberModalOpen((prev) => nextState ?? !prev)
                 }
             />
+
             {/* Main Content */}
             <main className="flex flex-col gap-10 h-full">
                 <PageHeader title="Manage team" />
