@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 import CustomButton from "../components/CustomButton";
 import MemberItem from "../features/teams/components/MemberItem";
-import { useState } from "react";
+import { useState, type JSX } from "react";
 import AddMemberModal from "../features/teams/components/AddMemberModal";
 import { FiPlus } from "react-icons/fi";
 import { useGetTeamQuery } from "../features/teams/TeamsApi";
@@ -15,12 +15,15 @@ import useGetUserTeamRole from "../hooks/useGetUserTeamRole";
 import EmptyState from "../components/EmptyState";
 import EmptyIllustration from "../assets/images/empty-illustration.svg";
 import clsx from "clsx";
+import OvalLoader from "../components/OvalLoader";
 
 const TeamPage = () => {
     const { id } = useParams();
     const { data: teamData } = useGetTeamQuery(parseInt(id!));
-    const { data: membersData } = useGetMembersQuery(parseInt(id!));
-    const { data: invitationsData } = useGetInvitationsQuery(parseInt(id!));
+    const { data: membersData, isLoading: isMembersLoading } =
+        useGetMembersQuery(parseInt(id!));
+    const { data: invitationsData, isLoading: isInvitationsLoading } =
+        useGetInvitationsQuery(parseInt(id!));
 
     const [addMemberModalOpen, setAddMemberModalOpen] = useState(false);
 
@@ -35,6 +38,40 @@ const TeamPage = () => {
         "h-1/2": allowedRoles.includes(currentUserRole),
         "h-full": !allowedRoles.includes(currentUserRole),
     });
+
+    let MembersList: JSX.Element | JSX.Element[] = (
+        <div className="flex items-center justify-center w-full h-full">
+            <OvalLoader size={50} />
+        </div>
+    );
+    if (members && !isMembersLoading) {
+        MembersList = members?.map((member) => (
+            <MemberItem
+                member={member}
+                teamId={parseInt(id!)}
+                key={member.user.id}
+            />
+        ));
+    }
+
+    let InvitationsList: JSX.Element | JSX.Element[] = (
+        <div className="flex items-center justify-center w-full h-full">
+            <OvalLoader size={50} />
+        </div>
+    );
+    if (invitations && !isInvitationsLoading) {
+        InvitationsList =
+            invitations.length > 0 ? (
+                invitations?.map((invitation) => (
+                    <InvitationItem {...invitation} key={invitation.id} />
+                ))
+            ) : (
+                <EmptyState
+                    message="No invitations found!"
+                    imageUrl={EmptyIllustration}
+                />
+            );
+    }
 
     return (
         <>
@@ -68,17 +105,12 @@ const TeamPage = () => {
                                         rounded
                                     >
                                         <FiPlus size={20} />
-                                        Add member
+                                        Invite members
                                     </CustomButton>
                                 </Authorize>
                             </header>
-                            <div className="flex flex-col py-4 px-8 overflow-auto ">
-                                {members?.map((member) => (
-                                    <MemberItem
-                                        member={member}
-                                        teamId={parseInt(id!)}
-                                    />
-                                ))}
+                            <div className="flex flex-col py-4 px-8 h-full w-full overflow-auto ">
+                                {MembersList}
                             </div>
                         </section>
                         {/* Invitations */}
@@ -92,18 +124,8 @@ const TeamPage = () => {
                                         Invitations
                                     </h1>
                                 </header>
-                                <div className="flex flex-col py-4 px-8 overflow-auto ">
-                                    {invitations && invitations.length == 0 && (
-                                        <div className="h-full">
-                                            <EmptyState
-                                                message="No invitations found!"
-                                                imageUrl={EmptyIllustration}
-                                            />
-                                        </div>
-                                    )}
-                                    {invitations?.map((invitation) => (
-                                        <InvitationItem {...invitation} />
-                                    ))}
+                                <div className="flex flex-col py-4 px-8 overflow-auto h-full w-full">
+                                    {InvitationsList}
                                 </div>
                             </section>
                         </Authorize>

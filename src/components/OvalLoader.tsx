@@ -2,8 +2,17 @@ import { type FC } from "react";
 import { Oval } from "react-loader-spinner";
 
 interface OvalLoaderProps {
+    /**
+     * @default 80
+     */
     size?: number;
+    /**
+     * @default #ff6f61
+     */
     color?: string;
+    /**
+     * @default 2
+     */
     strokeWidth?: number;
 }
 const OvalLoader: FC<OvalLoaderProps> = ({
