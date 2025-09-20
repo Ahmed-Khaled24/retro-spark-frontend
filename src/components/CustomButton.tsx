@@ -4,7 +4,7 @@ import { type FC, type ReactNode } from "react";
 import { Link } from "react-router";
 import OvalLoader from "./OvalLoader";
 
-interface CustomButtonProps {
+export interface CustomButtonProps {
     children: ReactNode;
     buttonType?: "button" | "submit";
     variant?: "primary" | "secondary" | "success" | "plain";

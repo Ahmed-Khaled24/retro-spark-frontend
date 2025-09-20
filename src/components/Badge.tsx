@@ -1,8 +1,9 @@
 import clsx from "clsx";
 import { type FC } from "react";
+import type { CustomButtonProps } from "./CustomButton";
 
 interface BadgeProps {
-    variant?: "primary" | "secondary" | "success";
+    variant?: CustomButtonProps["variant"];
     content: string;
     extraClasses?: string;
 }
