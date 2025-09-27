@@ -5,7 +5,9 @@ import CustomButton from "../../../components/CustomButton";
 import { TeamMemberRole, type TeamMemberDto } from "../dtos/team-member.dto";
 import DefaultAvatar from "../../../components/DefaultAvatar";
 import { useGetCurrentUserQuery } from "../../auth/AuthApi";
-import CustomSelect from "../../../components/CustomSelect";
+import CustomSelect, {
+    type CustomSelectOption,
+} from "../../../components/CustomSelect";
 import { errorToast, infoToast, successToast } from "../../../utils/toasters";
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import type { APIError } from "../../../app/api";
@@ -23,20 +25,23 @@ const ChangeRoleModal: FC<ChangeRoleModalProps> = ({
     member,
     teamId,
 }) => {
-    const [currentRole, setCurrentRole] = useState<TeamMemberRole>(member.role);
+    const [currentRole, setCurrentRole] = useState<CustomSelectOption>({
+        id: member.role,
+        content: member.role,
+    });
     const { data: currentUser } = useGetCurrentUserQuery();
     const [updateRole, { isLoading }] = useUpdateMemberRoleMutation();
     const memberName =
         member.user.id === currentUser?.id ? "You" : member.user.name;
 
     const changeRole = async () => {
-        if (currentRole === member.role) {
+        if (currentRole.content === member.role) {
             infoToast("No change in role was made");
         } else {
             await updateRole({
                 teamId,
                 userId: member.user.id,
-                newRole: currentRole,
+                newRole: currentRole.content as TeamMemberRole,
             })
                 .unwrap()
                 .then(() => successToast("Role updated successfully!"))
@@ -66,12 +71,10 @@ const ChangeRoleModal: FC<ChangeRoleModalProps> = ({
                     <div className="w-1/3">
                         <CustomSelect
                             value={currentRole}
-                            options={Object.values(TeamMemberRole).filter(
-                                (role) => role !== TeamMemberRole.OWNER,
-                            )}
-                            onChange={(newValue) =>
-                                setCurrentRole(newValue as TeamMemberRole)
-                            }
+                            options={Object.values(TeamMemberRole)
+                                .filter((role) => role !== TeamMemberRole.OWNER)
+                                .map((role) => ({ id: role, content: role }))}
+                            onChange={(newValue) => setCurrentRole(newValue)}
                         />
                     </div>
                 </div>
