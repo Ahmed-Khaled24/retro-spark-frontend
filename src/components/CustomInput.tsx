@@ -24,7 +24,7 @@ const CustomInput: FC<CustomInputProps> = ({
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setHasText(e.target.value.length > 0);
-        other.onChange && other.onChange(e);
+        other.onChange?.(e);
     };
 
     const wrapperClasses = clsx(

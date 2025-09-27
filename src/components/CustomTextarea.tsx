@@ -9,6 +9,7 @@ interface CustomTextareaProps
     background?: "white" | "transparent";
     labelPosition?: "embedded" | "separate";
     wrapperClassName?: string;
+    error?: string;
 }
 
 const CustomTextarea: FC<CustomTextareaProps> = ({
@@ -17,13 +18,14 @@ const CustomTextarea: FC<CustomTextareaProps> = ({
     background = "transparent",
     labelPosition = "separate",
     wrapperClassName,
+    error = "",
     ...other
 }) => {
     const [hasText, setHasText] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setHasText(e.target.value.length > 0);
-        other.onChange && other.onChange(e);
+        other.onChange?.(e);
     };
 
     const wrapperClasses = clsx(
@@ -32,7 +34,7 @@ const CustomTextarea: FC<CustomTextareaProps> = ({
             "bg-white": labelPosition === "embedded" && background === "white",
             "bg-transparent":
                 labelPosition === "embedded" && background === "transparent",
-            "border-gray-300 border-1": labelPosition === "embedded",
+            "border-primary-border border-1": labelPosition === "embedded",
             [`${rounded}`]: labelPosition === "embedded" && !!rounded,
         },
         wrapperClassName,
@@ -44,13 +46,14 @@ const CustomTextarea: FC<CustomTextareaProps> = ({
         "opacity-50": labelPosition === "embedded",
     });
 
-    const inputClasses = clsx("p-3 text-sm", {
+    const inputClasses = clsx("p-3 text-sm focus-visible:outline-none", {
         "p-4": labelPosition === "embedded",
         "pt-6 pb-2": labelPosition === "embedded" && hasText,
         "bg-white": labelPosition === "separate" && background === "white",
         "bg-transparent":
             labelPosition === "separate" && background === "transparent",
-        "border-gray-300 border-1": labelPosition === "separate",
+        "border-primary-border border-1": labelPosition === "separate",
+        "border-red-600! border-1": error,
         [`${rounded}`]: labelPosition === "separate" && !!rounded,
     });
 
@@ -65,6 +68,9 @@ const CustomTextarea: FC<CustomTextareaProps> = ({
                 }
                 onChange={handleChange}
             />
+            <p className=" absolute bottom-0 left-0 translate-y-[110%] text-sm -mt-1 text-red-600! ml-1">
+                {error}
+            </p>
         </Field>
     );
 };

@@ -10,11 +10,15 @@ import clsx from "clsx";
 import { type FC } from "react";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 
-interface CustomSelectProps {
+export interface CustomSelectOption {
+    id: number | string;
+    content: string;
+}
+export interface CustomSelectProps {
     label?: string;
-    options: string[];
-    value: string;
-    onChange: (newValue: string) => void;
+    options: CustomSelectOption[];
+    value: CustomSelectOption;
+    onChange: (newValue: CustomSelectOption) => void;
     mainButtonExtraClasses?: string;
     menuItemsExtraClasses?: string;
 }
@@ -47,7 +51,7 @@ const CustomSelect: FC<CustomSelectProps> = ({
                 {({ open }) => (
                     <>
                         <MenuButton className={mainButtonClasses}>
-                            <span>{value}</span>
+                            <span>{value.content}</span>
                             <MdKeyboardArrowLeft
                                 size={18}
                                 className={clsx("ml-auto", {
@@ -61,12 +65,12 @@ const CustomSelect: FC<CustomSelectProps> = ({
                             className={menuItemsClasses}
                         >
                             {options.map((option) => (
-                                <MenuItem>
+                                <MenuItem key={option.id}>
                                     <div
                                         onClick={() => onChange(option)}
                                         className="py-2 px-4 cursor-pointer data-focus:bg-primary/10 text-sm"
                                     >
-                                        {option}
+                                        {option.content}
                                     </div>
                                 </MenuItem>
                             ))}
