@@ -1,14 +1,19 @@
+import { z } from "zod";
+
 export enum BoardType {
-    PUBLIC = "Public",
-    PRIVATE = "Private",
+    PUBLIC = "PUBLIC",
+    PRIVATE = "PRIVATE",
 }
 
-export interface BoardDto {
-    id: number;
-    image_url?: string;
-    title: string;
-    description: string;
-    type: BoardType;
-    created_at: string;
-    updated_at?: string;
-}
+export const BoardSchema = z.object({
+    id: z.number(),
+    title: z.string().min(1, { message: "Title is required" }),
+    description: z.string(),
+    teamId: z.number(),
+    type: z.enum(BoardType),
+    is_anonymous: z.boolean(),
+    created_at: z.string(),
+    updated_at: z.string().optional(),
+});
+
+export type BoardDto = z.infer<typeof BoardSchema>;

@@ -1,43 +1,43 @@
-import { useState } from "react";
+import { useEffect, useState, type FC, type JSX } from "react";
 import CustomButton from "../../../components/CustomButton";
 import { HiPlus } from "react-icons/hi2";
 import CreateBoardModal from "./CreateBoardModal";
-import { BoardType, type BoardDto } from "../dtos/board.dto";
 import BoardCard from "./BoardCard";
+import { useGetAllBoardsQuery } from "../BoardsApi";
+import OvalLoader from "../../../components/OvalLoader";
 
-const BoardsGrid = () => {
+interface BoardsGridProps {
+    teamId: number;
+}
+
+const BoardsGrid: FC<BoardsGridProps> = ({ teamId }) => {
     const [createBoardModalOpen, setCreateBoardModalOpen] = useState(false);
+    const [skip, setSkip] = useState(true);
+
+    const { data, isLoading } = useGetAllBoardsQuery(teamId, { skip });
+    const boards = data?.data ?? [];
 
     const toggleCreateBoardModalOpen = (nextState?: boolean) => {
         setCreateBoardModalOpen((prev) => nextState ?? !prev);
     };
 
-    const boards: BoardDto[] = [
-        {
-            id: 1,
-            title: "Board 1.2",
-            description: "",
-            type: BoardType.PUBLIC,
-            created_at: new Date().toLocaleDateString(),
-            updated_at: new Date().toLocaleDateString(),
-        },
-        {
-            id: 2,
-            title: "Board 1.3",
-            description: "",
-            type: BoardType.PRIVATE,
-            created_at: new Date().toLocaleDateString(),
-            updated_at: new Date().toLocaleDateString(),
-        },
-        {
-            id: 3,
-            title: "Board 1.4",
-            description: "",
-            type: BoardType.PRIVATE,
-            created_at: new Date().toLocaleDateString(),
-            updated_at: new Date().toLocaleDateString(),
-        },
-    ];
+    useEffect(() => {
+        if (!teamId || teamId == -1) return;
+        console.log(teamId);
+        setSkip(false);
+    }, [teamId]);
+
+    let BoardsList: JSX.Element | JSX.Element[] = (
+        <div className="flex items-center justify-center w-full h-full">
+            <OvalLoader size={50} />
+        </div>
+    );
+
+    if (boards && !isLoading) {
+        BoardsList = boards.map((board) => (
+            <BoardCard key={board.id} {...board} />
+        ));
+    }
 
     return (
         <>
@@ -45,7 +45,9 @@ const BoardsGrid = () => {
             <CreateBoardModal
                 isOpen={createBoardModalOpen}
                 toggleOpen={toggleCreateBoardModalOpen}
+                teamId={teamId}
             />
+
             {/* Grid */}
             <div className="grid grid-cols-[repeat(auto-fill,_minmax(235px,_0))] gap-4 ">
                 <CustomButton
@@ -55,9 +57,7 @@ const BoardsGrid = () => {
                     <HiPlus size={36} />
                     <span className="text-xl font-normal">New board</span>
                 </CustomButton>
-                {boards.map((board) => (
-                    <BoardCard key={board.id} {...board} />
-                ))}
+                {BoardsList}
             </div>
         </>
     );

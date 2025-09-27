@@ -40,7 +40,8 @@ const BoardCard: FC<BoardDto> = (board) => {
                 <div className="flex justify-between">
                     <h1 className="text-base">{board.title}</h1>
                     <Badge
-                        content={board.type}
+                        extraClasses="capitalize"
+                        content={board.type.toLowerCase()}
                         variant={
                             board.type === BoardType.PRIVATE
                                 ? "secondary"
@@ -50,7 +51,8 @@ const BoardCard: FC<BoardDto> = (board) => {
                 </div>
                 <div className="mt-auto">
                     <span className="text-xs opacity-50">
-                        Last modified at {board.updated_at}
+                        Last modified at{" "}
+                        {new Date(board.updated_at!).toLocaleDateString()}
                     </span>
                 </div>
             </div>

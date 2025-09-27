@@ -1,4 +1,10 @@
-import type { BoardDto } from "./board.dto";
+import { z } from "zod";
+import { BoardSchema } from "./board.dto";
 
-export interface CreateBoardDto
-    extends Pick<BoardDto, "title" | "description" | "type"> {}
+export const CreateBoardSchema = BoardSchema.pick({
+    title: true,
+    description: true,
+    type: true,
+});
+
+export type CreateBoardDto = z.infer<typeof CreateBoardSchema>;

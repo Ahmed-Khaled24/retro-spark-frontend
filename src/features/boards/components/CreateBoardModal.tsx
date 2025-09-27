@@ -3,18 +3,33 @@ import { Modal, type ModalProps } from "../../../components/Modal";
 import CustomInput from "../../../components/CustomInput";
 import CustomTextarea from "../../../components/CustomTextarea";
 import CustomButton from "../../../components/CustomButton";
-import type { CreateBoardDto } from "../dtos/create-board.dto";
+import {
+    CreateBoardSchema,
+    type CreateBoardDto,
+} from "../dtos/create-board.dto";
 import { BoardType } from "../dtos/board.dto";
-import CustomSelect from "../../../components/CustomSelect";
+import CustomSelect, {
+    type CustomSelectOption,
+} from "../../../components/CustomSelect";
+import { useValidateForm } from "../../../hooks/useValidateForm";
+import { useCreateBoardMutation } from "../BoardsApi";
+import { errorToast, successToast } from "../../../utils/toasters";
 
-const CreateBoardModal: FC<Pick<ModalProps, "isOpen" | "toggleOpen">> = (
-    props,
-) => {
-    const [data, setData] = useState<CreateBoardDto>({
-        title: "",
-        description: "",
-        type: BoardType.PUBLIC,
-    });
+interface CreateBoardModalProps
+    extends Pick<ModalProps, "isOpen" | "toggleOpen"> {
+    teamId: number;
+}
+
+const initialValue: CreateBoardDto = {
+    title: "",
+    description: "",
+    type: BoardType.PUBLIC,
+};
+
+const CreateBoardModal: FC<CreateBoardModalProps> = (props) => {
+    const [createBoard, { isLoading }] = useCreateBoardMutation();
+    const { validate, fieldErrors } = useValidateForm(CreateBoardSchema);
+    const [data, setData] = useState<CreateBoardDto>(initialValue);
 
     const handleInputChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -22,7 +37,20 @@ const CreateBoardModal: FC<Pick<ModalProps, "isOpen" | "toggleOpen">> = (
         setData({ ...data, [`${e.target.name}`]: e.target.value });
     };
 
-    const handleSubmit = () => {};
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const isValid = await validate(data);
+        if (!isValid) return;
+
+        await createBoard({ data, teamId: props.teamId })
+            .unwrap()
+            .then(() => {
+                successToast("Board created successfully!");
+                setData(initialValue);
+                props.toggleOpen(false);
+            })
+            .catch(() => errorToast("Something went wrong!"));
+    };
 
     return (
         <Modal title="Create board" wrapperClasses="px-4" {...props}>
@@ -38,15 +66,19 @@ const CreateBoardModal: FC<Pick<ModalProps, "isOpen" | "toggleOpen">> = (
                             name="title"
                             onChange={handleInputChange}
                             value={data.title}
+                            error={fieldErrors.title?.at(0)}
                         />
                         <CustomSelect
                             label="Board Type"
-                            value={data.type}
-                            options={Object.values(BoardType)}
-                            onChange={(newValue: string) =>
+                            value={{ id: data.type, content: data.type }}
+                            options={Object.values(BoardType).map((type) => ({
+                                id: type,
+                                content: type,
+                            }))}
+                            onChange={(newValue: CustomSelectOption) =>
                                 setData({
                                     ...data,
-                                    type: newValue as BoardType,
+                                    type: newValue.content as BoardType,
                                 })
                             }
                         />
@@ -59,15 +91,20 @@ const CreateBoardModal: FC<Pick<ModalProps, "isOpen" | "toggleOpen">> = (
                         onChange={handleInputChange}
                         value={data.description}
                         rows={4}
+                        error={fieldErrors.description?.at(0)}
                     />
                 </div>
                 {/* Buttons */}
                 <div className="flex flex-row-reverse gap-2">
-                    <CustomButton className="rounded-xl" buttonType="submit">
+                    <CustomButton
+                        className="rounded-xl w-32"
+                        buttonType="submit"
+                        loading={isLoading}
+                    >
                         Create
                     </CustomButton>
                     <CustomButton
-                        className="rounded-xl"
+                        className="rounded-xl w-32"
                         outlined
                         onClick={() => props.toggleOpen(false)}
                     >
