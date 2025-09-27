@@ -12,6 +12,6 @@ export interface APIError<T = string> {
 export const appApi = createApi({
     baseQuery: fetchWithAutoRefresh,
     reducerPath: "appApi",
-    tagTypes: ["Auth", "Teams", "Members", "Invitations"],
+    tagTypes: ["Auth", "Teams", "Members", "Invitations", "Boards"],
     endpoints: () => ({}),
 });
